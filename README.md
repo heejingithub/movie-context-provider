@@ -1,6 +1,6 @@
 # MCP: Movie Context Provider
 
-A **demo OpenAI App** built with the **[OpenAI Apps SDK](https://developers.openai.com/apps-sdk)**, that's ready to deploy on **[Render](https://render.com)**.  
+A **demo OpenAI App** built with the **[OpenAI Apps SDK](https://developers.openai.com/apps-sdk)**, that's ready to deploy on **[Render](https://render.com)**.
 
 Manage your personal movie watchlist, get AI-powered recommendations, and interact with beautiful widgets directly in ChatGPT. Movie data powered by **[TMDB](https://www.themoviedb.org)**. Features multi-provider LLM support and PostgreSQL for data persistence.
 
@@ -18,8 +18,9 @@ This demo implements a movie discovery app with watchlists, ratings, and AI reco
 https://github.com/user-attachments/assets/82e33bd5-8a5e-4f03-b8df-44c352dc1ded
 
 **What you'll learn:**
+
 - Creating **interactive widgets**
-- Implementing **MCP tools** 
+- Implementing **MCP tools**
 - Deploying with **zero configuration**
 - Integrating **multiple LLM providers** (OpenAI, Anthropic, Google)
 
@@ -34,6 +35,7 @@ https://github.com/user-attachments/assets/82e33bd5-8a5e-4f03-b8df-44c352dc1ded
 - [Create an OpenAI app](#create-an-openai-app)
 - [Usage examples](#app-usage-examples)
 - [How widgets work](#how-widgets-work)
+- [Extending the app](#extending-the-app)
 - [Troubleshooting](#troubleshooting)
 - [Technical notes](#technical-notes)
 - [Resources](#resources)
@@ -45,24 +47,29 @@ https://github.com/user-attachments/assets/82e33bd5-8a5e-4f03-b8df-44c352dc1ded
 ### MCP tools
 
 **Search & Discovery**
+
 - `search_movies` - Search for one or multiple movies by title
 - `discover_movies` - Advanced filtering (director, actor, genre, year, rating)
 - `get_movie_details` - Full details with cast, ratings, and poster widget
 
 **Watchlist Management**
+
 - `add_to_watchlist`, `remove_from_watchlist`, `get_watchlist`
 
 **Watch History**
+
 - `mark_as_watched`, `mark_as_watched_batch`, `get_watched_movies`
 
 **Preferences**
+
 - `set_preferences`, `get_preferences`, `remove_preference_item`
 
 **AI Features** (requires LLM API key)
+
 - `get_recommendations` - Personalized movie suggestions based on your watch history and preferences
 
 > All tools are implemented in [`backend/src/tools/`](backend/src/tools/)
-> 
+>
 > **Note:** Only the `get_recommendations` tool requires an LLM API key. All other features work with just the TMDB API key.
 
 ### Widgets
@@ -100,6 +107,7 @@ This app is designed to be deployed to [Render](https://render.com) with zero co
 Get your API keys ready (you'll add them during deployment):
 
 - **TMDB API Key** (required, free):
+
   1. Create account at [themoviedb.org](https://www.themoviedb.org/signup)
   2. Go to [Settings → API](https://www.themoviedb.org/settings/api)
   3. Request an API key (choose "Developer" for personal use)
@@ -128,20 +136,21 @@ Click the "Fork" button at the top right of this page to create your own copy.
 
 When prompted, add these **secret** environment variables:
 
-| Variable | Required? | Description |
-|----------|-----------|-------------|
-| `TMDB_API_KEY` | ✅ Required | Your TMDB API key (for all movie data) |
-| `OPENAI_API_KEY` | 🤖 Optional* | OpenAI API key (GPT-5 for recommendations) |
-| `ANTHROPIC_API_KEY` | 🤖 Optional* | Anthropic API key (Claude Sonnet 4.5 for recommendations) |
-| `GEMINI_API_KEY` | 🤖 Optional* | Google Gemini API key (2.5 Flash for recommendations) |
-| `ADMIN_API_KEY` | ✨ Recommended | Your personal MCP access key (auto-generated if not set) |
-| `ADMIN_EMAIL` | Optional | Admin user email (defaults to `admin@localhost`) |
+| Variable            | Required?      | Description                                               |
+| ------------------- | -------------- | --------------------------------------------------------- |
+| `TMDB_API_KEY`      | ✅ Required    | Your TMDB API key (for all movie data)                    |
+| `OPENAI_API_KEY`    | 🤖 Optional\*  | OpenAI API key (GPT-5 for recommendations)                |
+| `ANTHROPIC_API_KEY` | 🤖 Optional\*  | Anthropic API key (Claude Sonnet 4.5 for recommendations) |
+| `GEMINI_API_KEY`    | 🤖 Optional\*  | Google Gemini API key (2.5 Flash for recommendations)     |
+| `ADMIN_API_KEY`     | ✨ Recommended | Your personal MCP access key (auto-generated if not set)  |
+| `ADMIN_EMAIL`       | Optional       | Admin user email (defaults to `admin@localhost`)          |
 
 > **\*At least one LLM API key is required** if you want to use the `get_recommendations` tool. All other features (search, watchlist, preferences, etc.) work without any LLM.
 
 > **Free tier note:** The provided Render blueprint is preconfigured so every service runs on free plans (the managed Postgres instance is free for the first 30 days). Free services spin down when idle, so the first request after a long pause may be slow or occasionally time out. Once instance is active, everything behaves normally. If you want production-like responsiveness, bump the services to Starter or Standard plans.
 
 Click **Apply** and Render will:
+
 - ✅ Provision a PostgreSQL database
 - ✅ Provision a Valkey cache (for performance)
 - ✅ Deploy the backend Node.js service
@@ -151,6 +160,7 @@ Click **Apply** and Render will:
 - ✅ Assign HTTPS domains
 
 **That's it!** In ~5 minutes your app will be live at:
+
 - **Backend MCP Server**: `https://your-app-name.onrender.com`
 - **Widget UI**: `https://your-app-name-widgets.onrender.com`
 
@@ -163,6 +173,7 @@ Create an OpenAI app to use your MCP server in ChatGPT:
 ### Step 1: Find your API key
 
 You'll need your API key to connect. Find it by:
+
 - Checking your Render deployment logs (shown after first deployment) - look for a line like:
   ```
   Connection URL: https://your-app-name.onrender.com/mcp/messages
@@ -199,7 +210,7 @@ ChatGPT will test the connection and add the MCP server.
 1. Open ChatGPT at [chatgpt.com](https://chatgpt.com)
 2. Click the **+** button (bottom left, next to the message input)
 3. Select your **Movie Context Provider** app from the list
-4. Start chatting: *"Search for Inception"* or *"Show my watchlist"*
+4. Start chatting: _"Search for Inception"_ or _"Show my watchlist"_
 
 ### Alternative: Other MCP clients (without widgets)
 
@@ -236,6 +247,7 @@ Widgets provide interactive UI components within ChatGPT:
 4. **State updates** automatically without page refresh
 
 **Available widgets:**
+
 - `movie-poster` - Detailed movie view with actions
 - `movie-list` - Sortable/filterable movie grid
 - `preferences` - Manage favorite genres, actors, directors
@@ -248,26 +260,26 @@ See [`frontend/src/widgets/`](frontend/src/widgets/) for implementation details.
 
 AI recommendations support three providers (priority: OpenAI → Anthropic → Gemini):
 
-| Provider | Model | Notes |
-|----------|-------|-------|
-| OpenAI | GPT-5 | Latest reasoning model |
-| Anthropic | Claude Sonnet 4.5 | Best speed/intelligence balance |
-| Gemini | Gemini 2.5 Flash | Best price/performance, free tier |
+| Provider  | Model             | Notes                             |
+| --------- | ----------------- | --------------------------------- |
+| OpenAI    | GPT-5             | Latest reasoning model            |
+| Anthropic | Claude Sonnet 4.5 | Best speed/intelligence balance   |
+| Gemini    | Gemini 2.5 Flash  | Best price/performance, free tier |
 
 Set any one API key to enable the `get_recommendations` tool. Models are fixed and auto-detected based on available keys.
-
 
 ### Authentication & user management
 
 > **Demo Authentication Note**  
-> This project uses simple API key authentication as a **shortcut for demo purposes**. Each API key serves as both authentication and user identification, making it easy to support multiple users without complex OAuth flows.  
->   
+> This project uses simple API key authentication as a **shortcut for demo purposes**. Each API key serves as both authentication and user identification, making it easy to support multiple users without complex OAuth flows.
+>
 > **For production apps**, consider implementing OAuth 2.0, which provides:
+>
 > - Secure user consent flows
 > - Token expiration and refresh
 > - Revocable access without password changes
 > - Industry-standard security practices
->   
+>
 > The API key approach here is intentionally simplified to focus on showing **MCP and OpenAI app SDK concepts** rather than authentication best practices.
 
 ### Automatic admin user setup
@@ -295,6 +307,7 @@ curl -X POST https://movie-mcp-server.onrender.com/admin/create-user \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -342,6 +355,7 @@ VALUES ('user@example.com', 'moviemcp_' || floor(random() * 1000000000)::text ||
 ```
 
 **Production Recommendations:**
+
 - Migrate to OAuth 2.0
 
 ---
@@ -477,6 +491,7 @@ npm run dev
 #### Development scripts
 
 **Backend:**
+
 ```bash
 npm run dev          # Hot reload (tsx watch)
 npm run build        # Compile TypeScript
@@ -486,6 +501,7 @@ npm run type-check   # TypeScript check
 ```
 
 **Frontend:**
+
 ```bash
 npm run dev          # Dev server with hot reload
 npm run build        # Build both widgets
@@ -495,60 +511,46 @@ npm run build:list   # Build list widget only
 
 #### Adding a new tool
 
-1. **Define tool** in `backend/src/tools/myTool.ts`:
+Quick example of adding a simple tool:
 
 ```typescript
+// backend/src/tools/myTool.ts
 export const myToolDefinition = {
-  name: 'my_tool',
-  description: 'Does something cool',
+  name: "my_tool",
+  description: "Does something cool",
   inputSchema: {
-    type: 'object',
+    type: "object",
     properties: {
-      param: { type: 'string', description: 'Parameter description' }
+      param: { type: "string", description: "Parameter description" },
     },
-    required: ['param']
-  }
+    required: ["param"],
+  },
 };
-
-export async function myTool(input: { param: string }, userId: number) {
-  // Your implementation
-  return {
-    content: [{ type: 'text', text: 'Tool executed successfully' }],
-    structuredContent: { success: true, result: 'data' }
-  };
-}
 ```
 
-2. **Register tool** in `backend/src/server/mcp-handlers.ts`:
+Then register it in `backend/src/server/tool-registry.ts`.
 
-```typescript
-import { myTool, myToolDefinition } from '../tools/myTool.js';
+📖 **For a complete walkthrough** (including widgets), see **[TUTORIAL.md](TUTORIAL.md)**.
 
-// Add to tools array
-const tools = [
-  // ... existing tools
-  myToolDefinition
-];
+---
 
-// Add to switch statement in tools/call handler
-case 'my_tool':
-  result = await myTool(validatedParams.arguments, userId);
-  break;
-```
+## Extending the app
 
-3. **Test with curl**:
+Want to add your own features? Here's what to update:
 
-```bash
-curl http://localhost:3000/mcp/messages \
-  -H "Authorization: Bearer demo_api_key_change_in_production" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc":"2.0",
-    "method":"tools/call",
-    "params":{"name":"my_tool","arguments":{"param":"value"}},
-    "id":1
-  }'
-```
+| To Add                   | Files                                                                   |
+| ------------------------ | ----------------------------------------------------------------------- |
+| **New tool (no widget)** | `tools/yourTool.ts` → `tool-registry.ts`                                |
+| **New tool + widget**    | + `widgets/yourWidget.tsx` → `build-all-widgets.js` → `mcp-handlers.ts` |
+
+**Ideas to try:**
+
+- `rate_movie` - Quick rating with star selector widget
+- `similar_movies` - TMDB's similar movies endpoint
+- `movie_quiz` - Generate trivia questions
+- `cast_filmography` - Show all movies for an actor
+
+📖 **Full step-by-step guide:** **[TUTORIAL.md](TUTORIAL.md)** walks through building a complete `compare_movies` tool with widget.
 
 ---
 
@@ -625,14 +627,14 @@ The [OpenAI Apps SDK](https://developers.openai.com/apps-sdk/build/custom-ux) ex
 ```typescript
 // ❌ BAD - Causes 424 error
 return {
-  content: [{ type: 'text', text: 'Preference set' }],
-  structuredContent: true  // Primitive rejected!
+  content: [{ type: "text", text: "Preference set" }],
+  structuredContent: true, // Primitive rejected!
 };
 
 // ✅ GOOD - Always use objects
 return {
-  content: [{ type: 'text', text: 'Preference set' }],
-  structuredContent: { success: true }  // Object works!
+  content: [{ type: "text", text: "Preference set" }],
+  structuredContent: { success: true }, // Object works!
 };
 ```
 
@@ -654,6 +656,7 @@ return {
 **Problem:** Initially struggled with passing movie data from backend to widgets.
 
 **Evolution:**
+
 1. **First attempt:** Used `_meta` to hide data from model → Data didn't reach widget
 2. **Second attempt:** Used `widgetDescription` in `_meta` → Model still showed duplicate content
 3. **Final solution:** Put data in `structuredContent` and keep `content` concise
@@ -683,6 +686,7 @@ This user-level prompt can guide ChatGPT to be less verbose, though the behavior
 ### 4. Widget Build Size Considerations
 
 Each widget is ~260 KB because:
+
 - Fully self-contained (includes React, all dependencies)
 - No code splitting (required for widget independence)
 - Bundles its own copy of shared utilities
@@ -696,17 +700,20 @@ This is **intentional** - OpenAI Apps SDK requires self-contained widget bundles
 ### Feature Extensions
 
 **TV Shows Support**
+
 - Add similar tools for TV series using TMDB's TV endpoints
 - Track episodes watched, season progress
 - Recommendations for "if you liked X, watch Y"
 
 **Analytics & Insights**
+
 - "Your most-watched genres this year"
 - "Average rating by director"
 - "Movies watched over time" graphs
 - Genre preference trends
 
 **🎬 Streaming Integration**
+
 - Show which services have each movie (JustWatch API)
 - Filter searches by "available on Netflix"
 - Track which services you subscribe to
@@ -728,12 +735,14 @@ This is **intentional** - OpenAI Apps SDK requires self-contained widget bundles
 This project uses the **Streamable HTTP transport**, which is the recommended modern approach for MCP servers (as of specification version 2025-03-26). The older SSE-only transport has been deprecated.
 
 **Why Streamable HTTP?**
+
 - Supports both SSE streaming and direct HTTP responses
 - Better session management (stateful or stateless)
 - Uses standard HTTP methods (GET/POST)
 - More flexible and scalable than SSE-only transport
 
 **References:**
+
 - [MCP Transports Documentation](https://modelcontextprotocol.io/docs/concepts/transports)
 
 ---
@@ -769,6 +778,7 @@ This project uses the **Streamable HTTP transport**, which is the recommended mo
 This is an educational project demonstrating how to develop and host an OpenAI App on Render. Feel free to use it as a starting point for your own apps!
 
 **Key Learning Points:**
+
 - OpenAI Apps SDK widget development
 - MCP protocol implementation
 - Database transactions & data modeling
