@@ -18,7 +18,11 @@ import {
   OPENAI_WIDGET_META,
   TOOL_NAMES,
 } from '../config/constants.js';
-import { MOVIE_POSTER_WIDGET_URL, MOVIE_LIST_WIDGET_URL } from '../utils/config.js';
+import {
+  MOVIE_POSTER_WIDGET_URL,
+  MOVIE_LIST_WIDGET_URL,
+  MOVIE_QUIZ_WIDGET_URL,
+} from '../utils/config.js';
 import { getToolDefinitions, callTool } from './tool-registry.js';
 
 /**
@@ -132,6 +136,19 @@ async function handleListResources() {
       },
     });
   }
+
+  if (MOVIE_QUIZ_WIDGET_URL) {
+    resources.push({
+      uri: WIDGET_CONFIG.quiz.uri,
+      name: WIDGET_CONFIG.quiz.name,
+      description: WIDGET_CONFIG.quiz.description,
+      mimeType: WIDGET_CONFIG.quiz.mimeType,
+      _meta: {
+        'openai/widgetAccessible': OPENAI_WIDGET_META.widgetAccessible,
+        'openai/resultCanProduceWidget': OPENAI_WIDGET_META.resultCanProduceWidget,
+      },
+    });
+  }
   
   return { resources };
 }
@@ -176,6 +193,16 @@ async function handleReadResource(request: any) {
 <div id="${WIDGET_CONFIG.preferences.rootElementId}"></div>
 <script type="module" src="${widgetUrl}"></script>
     `.trim();
+  } else if (request.params.uri.startsWith(WIDGET_CONFIG.quiz.uri)) {
+    if (!MOVIE_QUIZ_WIDGET_URL) {
+      throw new Error('Movie quiz widget URL not configured');
+    }
+    widgetUrl = MOVIE_QUIZ_WIDGET_URL;
+    widgetDescription = WIDGET_CONFIG.quiz.widgetDescription;
+    widgetHtml = `
+<div id="${WIDGET_CONFIG.quiz.rootElementId}"></div>
+<script type="module" src="${MOVIE_QUIZ_WIDGET_URL}"></script>
+    `.trim();
   } else {
     throw new Error(`Unknown resource: ${request.params.uri}`);
   }
@@ -201,4 +228,3 @@ async function handleReadResource(request: any) {
     ],
   };
 }
-

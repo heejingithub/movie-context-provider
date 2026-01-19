@@ -42,6 +42,7 @@ import {
   getMovieDetails as getMovieDetailsTool,
   getMovieDetailsToolDefinition,
 } from '../tools/movieDetails.js';
+import { movieQuiz, movieQuizToolDefinition } from '../tools/movieQuiz.js';
 
 /**
  * Check if any LLM API key is available
@@ -99,6 +100,7 @@ export function getToolDefinitions() {
     getPreferencesToolDefinition,
     removePreferenceItemToolDefinition,
     getMovieDetailsToolDefinition,
+    movieQuizToolDefinition,
   ];
 
   // Only include recommendations tool if LLM is configured
@@ -206,6 +208,9 @@ export async function callTool(name: string, args: any, userId?: number): Promis
           };
         }
 
+      case TOOL_NAMES.MOVIE_QUIZ:
+        return await movieQuiz(args as any, userId);
+
       default:
         return {
           content: [
@@ -244,5 +249,4 @@ export async function callTool(name: string, args: any, userId?: number): Promis
     };
   }
 }
-
 
