@@ -28,6 +28,7 @@ export const EnvSchema = z.object({
   
   // Widgets (optional for local dev)
   MOVIE_POSTER_WIDGET_URL: z.string().optional(),
+  MOVIE_QUIZ_WIDGET_URL: z.string().optional(),
   
   // Authentication (optional for local dev, required in production)
   ADMIN_API_KEY: z.string().optional(),

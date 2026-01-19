@@ -70,6 +70,7 @@ function ensureComponentPath(baseUrl: string | null, filename: string): string |
 // ============================================================================
 
 const rawWidgetHost = process.env.MOVIE_POSTER_WIDGET_URL;
+const rawQuizWidgetHost = process.env.MOVIE_QUIZ_WIDGET_URL ?? rawWidgetHost;
 
 if (!rawWidgetHost) {
   console.warn('[Config] MOVIE_POSTER_WIDGET_URL is not set; widgets will be disabled.');
@@ -79,6 +80,7 @@ if (!rawWidgetHost) {
 
 // Normalize and build full widget URLs
 const normalizedBaseUrl = buildRenderUrl(rawWidgetHost);
+const normalizedQuizBaseUrl = buildRenderUrl(rawQuizWidgetHost);
 const normalizedPosterUrl = ensureComponentPath(
   normalizedBaseUrl,
   WIDGET_CONFIG.poster.componentFilename
@@ -88,7 +90,7 @@ const normalizedListUrl = ensureComponentPath(
   WIDGET_CONFIG.list.componentFilename
 );
 const normalizedQuizUrl = ensureComponentPath(
-  normalizedBaseUrl,
+  normalizedQuizBaseUrl,
   WIDGET_CONFIG.quiz.componentFilename
 );
 
@@ -96,6 +98,13 @@ if (rawWidgetHost && !normalizedPosterUrl) {
   console.error(
     '[Config] MOVIE_POSTER_WIDGET_URL could not be normalized. Check the value:',
     rawWidgetHost
+  );
+}
+
+if (rawQuizWidgetHost && !normalizedQuizUrl) {
+  console.error(
+    '[Config] MOVIE_QUIZ_WIDGET_URL could not be normalized. Check the value:',
+    rawQuizWidgetHost
   );
 }
 
