@@ -50,13 +50,17 @@ function buildRenderUrl(hostOrUrl: string | undefined | null): string | null {
  */
 function ensureComponentPath(baseUrl: string | null, filename: string): string | null {
   if (!baseUrl) return null;
-  
-  // If it already ends with .js, assume it's the full path
+
   if (baseUrl.endsWith('.js')) {
-    return baseUrl;
+    if (baseUrl.endsWith(`/${filename}`)) {
+      return baseUrl;
+    }
+
+    const trimmed = baseUrl.replace(/\/[^/]+$/, '');
+    const normalized = trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
+    return `${normalized}${filename}`;
   }
-  
-  // Otherwise, append the filename
+
   const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
   return `${normalized}${filename}`;
 }
