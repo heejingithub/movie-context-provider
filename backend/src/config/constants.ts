@@ -111,6 +111,16 @@ export const WIDGET_CONFIG = {
     widgetDescription:
       'Displays user preferences in an organized layout with badges for genres and avatar cards for actors/directors with profile pictures from TMDB.',
   },
+  quiz: {
+    uri: 'ui://widget/movie-quiz',
+    name: 'Movie Quiz Widget',
+    description: 'Interactive trivia quiz widget for movie questions',
+    mimeType: 'text/html+skybridge',
+    rootElementId: 'movie-quiz-widget-root',
+    componentFilename: 'quiz-component.js',
+    widgetDescription:
+      'Presents a multiple-choice trivia quiz with score tracking and explanations based on movie data.',
+  },
 } as const;
 
 // ============================================================================
@@ -139,6 +149,7 @@ export const TOOL_NAMES = {
   GET_PREFERENCES: 'get_preferences',
   GET_RECOMMENDATIONS: 'get_recommendations',
   GET_MOVIE_DETAILS: 'get_movie_details',
+  MOVIE_QUIZ: 'movie_quiz',
 } as const;
 
 // Type-safe tool names
@@ -178,4 +189,3 @@ export const GENRE_MAP: Record<string, string> = {
   'war': '10752',
   'western': '37',
 } as const;
-
