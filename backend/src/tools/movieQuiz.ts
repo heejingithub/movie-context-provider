@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { MOVIE_QUIZ_WIDGET_URL } from '../utils/config.js';
 import { getMovieDetails as fetchMovieDetails, searchMovies as tmdbSearchMovies } from '../utils/tmdb.js';
-import { OPENAI_WIDGET_META, WIDGET_CONFIG } from '../config/constants.js';
+import { WIDGET_CONFIG } from '../config/constants.js';
 import { withToolHandler } from '../utils/tool-helpers.js';
 
 const MovieQuizSchema = z.object({
@@ -228,7 +228,8 @@ async function handleMovieQuiz(input: MovieQuizInput): Promise<MovieQuizResult> 
   const widgetMeta = MOVIE_QUIZ_WIDGET_URL
     ? {
         'openai/outputTemplate': WIDGET_CONFIG.quiz.uri,
-        ...OPENAI_WIDGET_META,
+        'openai/widgetAccessible': true,
+        'openai/resultCanProduceWidget': true,
         'openai/toolInvocation/invoking': 'Generating movie quiz...',
         'openai/toolInvocation/invoked': 'Generated movie quiz',
       }
@@ -280,7 +281,8 @@ export const movieQuizToolDefinition = {
   ...(MOVIE_QUIZ_WIDGET_URL && {
     _meta: {
       'openai/outputTemplate': WIDGET_CONFIG.quiz.uri,
-      ...OPENAI_WIDGET_META,
+      'openai/widgetAccessible': true,
+      'openai/resultCanProduceWidget': true,
       'openai/toolInvocation/invoking': 'Generating movie quiz...',
       'openai/toolInvocation/invoked': 'Generated movie quiz',
     },
