@@ -9,11 +9,21 @@ import { getMovieDetails, searchMovies } from '../utils/tmdb.js';
 import { MOVIE_QUIZ_WIDGET_URL } from '../utils/config.js';
 import { WIDGET_CONFIG } from '../config/constants.js';
 
-const MovieQuizSchema = z.object({
-  tmdb_id: z.number().int().positive().optional(),
-  title: z.string().min(1).optional(),
-  question_count: z.number().int().min(3).max(8).optional(),
-});
+const MovieQuizSchema = z
+  .object({
+    tmdb_id: z.number().int().positive().optional(),
+    title: z.string().min(1).optional(),
+    question_count: z.number().int().min(3).max(8).default(5),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.tmdb_id && !value.title) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Either tmdb_id or title is required.',
+        path: ['tmdb_id'],
+      });
+    }
+  });
 
 export type MovieQuizInput = z.infer<typeof MovieQuizSchema>;
 
@@ -189,12 +199,7 @@ async function resolveMovie(input: MovieQuizInput) {
 }
 
 async function handleMovieQuiz(input: MovieQuizInput): Promise<MovieQuizResult> {
-  if (!input.tmdb_id && !input.title) {
-    throw new Error('Either tmdb_id or title is required.');
-  }
-
   const movie = await resolveMovie(input);
-  const questionCount = input.question_count ?? 5;
 
   const quizMovie: QuizMovie = {
     tmdb_id: movie.tmdb_id,
@@ -222,7 +227,7 @@ async function handleMovieQuiz(input: MovieQuizInput): Promise<MovieQuizResult> 
     throw new Error('Not enough data to generate quiz questions.');
   }
 
-  const questions = shuffle(questionBank).slice(0, questionCount);
+  const questions = shuffle(questionBank).slice(0, input.question_count);
 
   const widgetMeta = MOVIE_QUIZ_WIDGET_URL
     ? {
