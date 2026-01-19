@@ -40,6 +40,7 @@
           <option value="poster">Movie Poster</option>
           <option value="list">Movie List</option>
           <option value="preferences">Preferences</option>
+          <option value="quiz">Movie Quiz</option>
         </select>
       </div>
 
@@ -70,6 +71,7 @@
         <div id="movie-poster-widget-root" class="block"></div>
         <div id="movie-list-widget-root" class="hidden"></div>
         <div id="preferences-widget-root" class="hidden"></div>
+        <div id="movie-quiz-widget-root" class="hidden"></div>
       </div>
     </div>
 
@@ -322,6 +324,92 @@
             preferences: [],
             count: 0
           }
+        },
+        quiz: {
+          'Inception Trivia': {
+            success: true,
+            quiz: {
+              movie: {
+                tmdb_id: 27205,
+                title: 'Inception',
+                year: 2010,
+                poster_url: 'https://image.tmdb.org/t/p/w500/ljsZTbVsrQSqZgWeep2B1QiDKuh.jpg',
+                backdrop_url: 'https://image.tmdb.org/t/p/original/s3TBrRGB1iav7gFOCNx3H31MoES.jpg'
+              },
+              questions: [
+                {
+                  id: 'release-year',
+                  question: 'What year was "Inception" released?',
+                  options: ['2008', '2010', '2011', '2012'],
+                  correctIndex: 1,
+                  explanation: 'The film premiered in 2010.'
+                },
+                {
+                  id: 'director',
+                  question: 'Who directed "Inception"?',
+                  options: ['Christopher Nolan', 'Steven Spielberg', 'Greta Gerwig', 'Denis Villeneuve'],
+                  correctIndex: 0,
+                  explanation: 'Christopher Nolan is credited as the director.'
+                },
+                {
+                  id: 'character',
+                  question: 'Who played Dom Cobb in "Inception"?',
+                  options: ['Leonardo DiCaprio', 'Joseph Gordon-Levitt', 'Elliot Page', 'Tom Hardy'],
+                  correctIndex: 0,
+                  explanation: 'Leonardo DiCaprio portrays Dom Cobb.'
+                },
+                {
+                  id: 'genre',
+                  question: 'Which genre is "Inception" associated with?',
+                  options: ['Science Fiction', 'Western', 'Romance', 'Documentary'],
+                  correctIndex: 0,
+                  explanation: 'Inception is categorized as Science Fiction.'
+                },
+                {
+                  id: 'runtime',
+                  question: 'About how long is "Inception"?',
+                  options: ['128 minutes', '148 minutes', '158 minutes', '168 minutes'],
+                  correctIndex: 1,
+                  explanation: 'The official runtime is 148 minutes.'
+                }
+              ]
+            }
+          },
+          'The Matrix Quiz': {
+            success: true,
+            quiz: {
+              movie: {
+                tmdb_id: 603,
+                title: 'The Matrix',
+                year: 1999,
+                poster_url: 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
+                backdrop_url: 'https://image.tmdb.org/t/p/original/icmmSD4vTTDKOq2vvdulafOGw93.jpg'
+              },
+              questions: [
+                {
+                  id: 'release-year',
+                  question: 'What year was "The Matrix" released?',
+                  options: ['1997', '1998', '1999', '2000'],
+                  correctIndex: 2,
+                  explanation: 'The film premiered in 1999.'
+                },
+                {
+                  id: 'director',
+                  question: 'Who directed "The Matrix"?',
+                  options: ['Lana Wachowski', 'Christopher Nolan', 'Patty Jenkins', 'Ridley Scott'],
+                  correctIndex: 0,
+                  explanation: 'Lana Wachowski is credited as a director of the film.'
+                },
+                {
+                  id: 'character',
+                  question: 'Who played Neo in "The Matrix"?',
+                  options: ['Keanu Reeves', 'Laurence Fishburne', 'Hugo Weaving', 'Carrie-Anne Moss'],
+                  correctIndex: 0,
+                  explanation: 'Keanu Reeves portrays Neo.'
+                }
+              ]
+            }
+          }
         }
       };
 
@@ -334,10 +422,11 @@
       let widgets = {};
 
       async function loadWidgets() {
-        const [poster, list, preferences] = await Promise.all([
+        const [poster, list, preferences, quiz] = await Promise.all([
           import('/src/widgets/poster.tsx'),
           import('/src/widgets/list.tsx'),
-          import('/src/widgets/preferences.tsx')
+          import('/src/widgets/preferences.tsx'),
+          import('/src/widgets/quiz.tsx')
         ]);
         console.log('✅ All widgets loaded');
       }
@@ -384,7 +473,8 @@
         const widgetIds = {
           poster: 'movie-poster-widget-root',
           list: 'movie-list-widget-root',
-          preferences: 'preferences-widget-root'
+          preferences: 'preferences-widget-root',
+          quiz: 'movie-quiz-widget-root'
         };
         
         Object.entries(widgetIds).forEach(([type, id]) => {

@@ -83,6 +83,10 @@ const normalizedListUrl = ensureComponentPath(
   normalizedBaseUrl,
   WIDGET_CONFIG.list.componentFilename
 );
+const normalizedQuizUrl = ensureComponentPath(
+  normalizedBaseUrl,
+  WIDGET_CONFIG.quiz.componentFilename
+);
 
 if (rawWidgetHost && !normalizedPosterUrl) {
   console.error(
@@ -94,6 +98,7 @@ if (rawWidgetHost && !normalizedPosterUrl) {
 // Export normalized URLs
 export const MOVIE_POSTER_WIDGET_URL = normalizedPosterUrl;
 export const MOVIE_LIST_WIDGET_URL = normalizedListUrl;
+export const MOVIE_QUIZ_WIDGET_URL = normalizedQuizUrl;
 
 /**
  * Utility function to resolve Render.com host URLs
@@ -102,4 +107,3 @@ export const MOVIE_LIST_WIDGET_URL = normalizedListUrl;
 export function resolveRenderHostUrl(hostOrUrl: string | null | undefined): string | null {
   return buildRenderUrl(hostOrUrl);
 }
-

@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:poster && npm run build:list && npm run build:preferences && npm run build:postbuild",
+    "build": "npm run build:poster && npm run build:list && npm run build:preferences && npm run build:quiz && npm run build:postbuild",
     "build:poster": "WIDGET_ENTRY=poster-component vite build",
     "build:list": "WIDGET_ENTRY=list-component vite build --mode list",
     "build:preferences": "WIDGET_ENTRY=preferences-component vite build --mode preferences",
+    "build:quiz": "WIDGET_ENTRY=quiz-component vite build --mode quiz",
     "build:postbuild": "cp static/harness.html dist/harness.html 2>/dev/null || true",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
